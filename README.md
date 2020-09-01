@@ -1,13 +1,13 @@
-#CAR API
+# CAR API
 -----------------------
 
-###Installation
+### Installation
 ```
 pip install -r requirements.txt
 ```
------------------------
 
-###Endpoints
+
+### Endpoints
 
 **/car/query**
 
