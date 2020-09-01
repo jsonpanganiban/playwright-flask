@@ -43,7 +43,7 @@ async def get_car_info(lot_id, member=False):
             viewport={"width": 1920, "height": 1080},
         )
 
-        page = await browser.newPage()
+        page = await context.newPage()
 
         async def login(page):
             await page.goto("https://www.copart.com/login/")
