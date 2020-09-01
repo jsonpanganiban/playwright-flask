@@ -5,7 +5,6 @@ import src.copart as copart
 from dotenv import load_dotenv
 from flask import Flask, jsonify, make_response, request
 
-# from src.spider import Spider
 
 load_dotenv()
 
@@ -19,7 +18,7 @@ def index():
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({"error": "Not found"}), 404)
+    return make_response(jsonify(error="Not found"), 404)
 
 
 @app.route("/car/member/lot/<string:lot_number>", methods=["GET"])
@@ -28,11 +27,9 @@ def member(lot_number):
     asyncio.set_event_loop(loop)
     car_info = loop.run_until_complete(copart.get_lot_details(lot_number, True))
     if car_info == 404:
-        return make_response(
-            jsonify({"error": "Result not found. Check your query"}), 404
-        )
+        return make_response(jsonify(error="Result not found. Check your query"), 404)
     else:
-        return jsonify({"success": True, "result": car_info})
+        return jsonify(success=True, result=car_info)
 
 
 @app.route("/car/lot/<string:lot_number>", methods=["GET"])
@@ -41,11 +38,9 @@ def car_info(lot_number):
     asyncio.set_event_loop(loop)
     car_info = loop.run_until_complete(copart.get_lot_details(lot_number))
     if car_info == 404:
-        return make_response(
-            jsonify({"error": "Result not found. Check your query"}), 404
-        )
+        return make_response(jsonify(error="Result not found. Check your query"), 404)
     else:
-        return jsonify({"success": True, "result": car_info})
+        return jsonify(success=True, result=car_info)
 
 
 @app.route("/car/query", methods=["GET"])
@@ -102,15 +97,12 @@ def search_car():
     car_list = loop.run_until_complete(copart.get_car_list(referer_url, all_page_query))
 
     if car_list == 404:
-        return make_response(
-            jsonify({"error": "Result not found. Check your query"}), 404
-        )
+        return make_response(jsonify(error="Result not found. Check your query"), 404)
     else:
-        return jsonify(
-            {"success": True, "resultCount": len(car_list), "result": car_list}
-        )
+        return jsonify(success=True, resultCount=len(car_list), result=car_list)
 
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
     # app.run(debug=True, host="0.0.0.0")
+

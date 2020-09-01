@@ -1,9 +1,4 @@
-import asyncio
-import re
 import shadow_useragent
-import jmespath
-import json
-import time
 
 from playwright import async_playwright
 
@@ -93,6 +88,7 @@ async def get_car_info(lot_id, member=False):
             response = 404
 
         await browser.close()
+
         return response
 
 
@@ -100,28 +96,30 @@ async def get_row_data(page, car_list):
     for v in await page.querySelectorAll("#serverSideDataTable tbody>tr"):
         lot_number_elem = await v.querySelector('[data-uname="lotsearchLotnumber"]')
         lot_number = await lot_number_elem.evaluate(
-            "(element) => element.innerText", lot_number_elem,
+            "(element) => element.innerText", lot_number_elem
         )
+
         year_elem = await v.querySelector('[data-uname="lotsearchLotcenturyyear"]')
-        year = await year_elem.evaluate("(element) => element.innerText", year_elem,)
+        year = await year_elem.evaluate("(element) => element.innerText", year_elem)
+
         make_elem = await v.querySelector('[data-uname="lotsearchLotmake"]')
-        make = await make_elem.evaluate("(element) => element.innerText", make_elem,)
+        make = await make_elem.evaluate("(element) => element.innerText", make_elem)
 
         model_elem = await v.querySelector('[data-uname="lotsearchLotmodel"]')
-        model = await model_elem.evaluate("(element) => element.innerText", model_elem,)
+        model = await model_elem.evaluate("(element) => element.innerText", model_elem)
 
         item_elem = await v.querySelector('[data-uname="lotsearchItemnumber"]')
-        item = await item_elem.evaluate("(element) => element.innerText", item_elem,)
+        item = await item_elem.evaluate("(element) => element.innerText", item_elem)
 
         location_elem = await v.querySelector('[data-uname="lotsearchLotyardname"]')
         location = await location_elem.evaluate(
-            "(element) => element.innerText", location_elem,
+            "(element) => element.innerText", location_elem
         )
 
         sale_date_elem = await v.querySelector('[data-uname="lotsearchLotauctiondate"]')
         sale_date = "".join(
             await sale_date_elem.evaluate(
-                "(element) => element.innerText", sale_date_elem,
+                "(element) => element.innerText", sale_date_elem
             )
         ).split("\n")
 
@@ -129,33 +127,33 @@ async def get_row_data(page, car_list):
             '[data-uname="lotsearchLotodometerreading"]'
         )
         odometer = await odometer_elem.evaluate(
-            "(element) => element.innerText", odometer_elem,
+            "(element) => element.innerText", odometer_elem
         )
 
         doc_type_elem = await v.querySelector('[data-uname="lotsearchSaletitletype"]')
         doc_type = await doc_type_elem.evaluate(
-            "(element) => element.innerText", doc_type_elem,
+            "(element) => element.innerText", doc_type_elem
         )
 
         damage_elem = await v.querySelector(
             '[data-uname="lotsearchLotdamagedescription"]'
         )
         damage = await damage_elem.evaluate(
-            "(element) => element.innerText", damage_elem,
+            "(element) => element.innerText", damage_elem
         )
 
         est_retail_value_elem = await v.querySelector(
             '[data-uname="lotsearchLotestimatedretailvalue"]'
         )
         est_retail_value = await est_retail_value_elem.evaluate(
-            "(element) => element.innerText", est_retail_value_elem,
+            "(element) => element.innerText", est_retail_value_elem
         )
 
         await v.scrollIntoViewIfNeeded()
 
         img_url_elem = await v.querySelector('[data-uname="lotsearchLotimage"]')
         img_url = await img_url_elem.evaluate(
-            "(element) => element.getAttribute('src')", img_url_elem,
+            "(element) => element.getAttribute('src')", img_url_elem
         )
 
         car_list.append(
