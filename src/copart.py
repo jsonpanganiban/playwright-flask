@@ -23,7 +23,7 @@ async def get_car_info(lot_id, member=False):
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
-            proxy={"server": "", "username": "", "password": "",},
+            # proxy={"server": "", "username": "", "password": "",},
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -36,12 +36,12 @@ async def get_car_info(lot_id, member=False):
             ],
         )
 
-        # user_agent = shadow_useragent.ShadowUserAgent()
-        # context = await browser.newContext(
-        #     userAgent=user_agent.most_common,
-        #     ignoreHTTPSErrors=True,
-        #     viewport={"width": 1920, "height": 1080},
-        # )
+        user_agent = shadow_useragent.ShadowUserAgent()
+        context = await browser.newContext(
+            userAgent=user_agent.random,
+            ignoreHTTPSErrors=True,
+            viewport={"width": 1920, "height": 1080},
+        )
 
         page = await browser.newPage()
 
@@ -182,7 +182,7 @@ async def get_car_list(url=None, is_all_pages=False):
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
-            proxy={"server": "", "username": "", "password": "",},
+            # proxy={"server": "", "username": "", "password": "",},
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -199,10 +199,9 @@ async def get_car_list(url=None, is_all_pages=False):
         context = await browser.newContext(
             userAgent=user_agent.random,
             ignoreHTTPSErrors=True,
-            #     viewport={"width": 1920, "height": 1080},
+            viewport={"width": 1920, "height": 1080},
         )
 
-        ws_endpoint = context.route
         page = await context.newPage()
         await page.goto(url)
 

@@ -27,7 +27,12 @@ def member(lot_number):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     car_info = loop.run_until_complete(copart.get_lot_details(lot_number, True))
-    return jsonify({"result": car_info})
+    if car_info == 404:
+        return make_response(
+            jsonify({"error": "Result not found. Check your query"}), 404
+        )
+    else:
+        return jsonify({"success": True, "result": car_info})
 
 
 @app.route("/car/lot/<string:lot_number>", methods=["GET"])
@@ -35,7 +40,12 @@ def car_info(lot_number):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     car_info = loop.run_until_complete(copart.get_lot_details(lot_number))
-    return jsonify({"result": car_info})
+    if car_info == 404:
+        return make_response(
+            jsonify({"error": "Result not found. Check your query"}), 404
+        )
+    else:
+        return jsonify({"success": True, "result": car_info})
 
 
 @app.route("/car/query", methods=["GET"])
@@ -84,17 +94,6 @@ def search_car():
         "%22searchName%22:%22%22,"
         "%22freeFormSearch%22:false%7D"
     )
-
-    page_value = 0
-    if "page" in args:
-        page = urllib.parse.quote(args.get("page"))
-        if page != 0:
-            page_value = int(page) - 1
-
-    size_value = 100
-    if "size" in args:
-        size = urllib.parse.quote(args.get("size"))
-        size_value = size
 
     all_page_query = True if "all" in args else False
 
