@@ -1,0 +1,5 @@
+python-dotenv==0.14.0
+Flask==1.1.2
+shadow-useragent==0.0.17
+jmespath==0.10.0
+playwright==0.8.0
