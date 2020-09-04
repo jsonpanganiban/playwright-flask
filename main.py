@@ -36,7 +36,7 @@ def member(lot_number):
 def car_info(lot_number):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    car_info = loop.run_until_complete(copart.get_lot_details(lot_number))
+    car_info = loop.run_until_complete(copart.get_car_info(lot_number))
     if car_info == 404:
         return make_response(jsonify(error="Result not found. Check your query"), 404)
     else:

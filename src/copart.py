@@ -5,11 +5,7 @@ from playwright import async_playwright
 
 async def get_text(page, selector):
     try:
-        return str(
-            await page.evaluate(
-                "(element) => element.innerText", await page.querySelector(selector),
-            )
-        )
+        await page.evalOnSelector("element => element.innerText", selector)
     except Exception:
         return ""
 
@@ -35,7 +31,7 @@ async def get_car_info(lot_id, member=False):
         context = await browser.newContext(
             userAgent=user_agent.random,
             ignoreHTTPSErrors=True,
-            viewport={"width": 1920, "height": 1080},
+            # viewport={"width": 1920, "height": 1080},
         )
 
         page = await context.newPage()
@@ -150,7 +146,6 @@ async def get_row_data(page, car_list):
         )
 
         await v.scrollIntoViewIfNeeded()
-
         img_url_elem = await v.querySelector('[data-uname="lotsearchLotimage"]')
         img_url = await img_url_elem.evaluate(
             "(element) => element.getAttribute('src')", img_url_elem
@@ -158,18 +153,18 @@ async def get_row_data(page, car_list):
 
         car_list.append(
             {
-                "Img Url": img_url,
-                "Lot Number": lot_number,
-                "Year": year,
-                "Make": make,
-                "Model": model,
-                "Item Number": item,
-                "Location": location,
-                "Sale Date": sale_date,
-                "Odometer": odometer,
-                "Doc Type": doc_type,
-                "Damage": damage,
-                "Est. Retail Value": est_retail_value,
+                "img_url": img_url,
+                "lot_number": lot_number,
+                "year": year,
+                "make": make,
+                "model": model,
+                "item_number": item,
+                "location": location,
+                "sale_date": sale_date,
+                "odometer": odometer,
+                "doc_type": doc_type,
+                "damage": damage,
+                "est_retail_value": est_retail_value,
             }
         )
 
@@ -197,7 +192,7 @@ async def get_car_list(url=None, is_all_pages=False):
         context = await browser.newContext(
             userAgent=user_agent.random,
             ignoreHTTPSErrors=True,
-            viewport={"width": 1920, "height": 1080},
+            # viewport={"width": 1920, "height": 1080},
         )
 
         page = await context.newPage()
